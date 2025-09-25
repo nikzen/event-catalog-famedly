@@ -1,0 +1,9 @@
+# Node / EventCatalog
+node_modules/
+out/
+build/
+.cache/
+dist/
+
+# Logfiles
+npm-debug.log*
