@@ -37,24 +37,10 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
-      # Ermittel den Build-Ordner (out oder build)
-      - name: Detect build directory
-        id: detect
-        run: |
-          if [ -d "out" ]; then
-            echo "publish_dir=out" >> $GITHUB_OUTPUT
-          elif [ -d "build" ]; then
-            echo "publish_dir=build" >> $GITHUB_OUTPUT
-          else
-            echo "Konnte Build-Ordner nicht finden (erwarte 'out' oder 'build')." >&2
-            exit 1
-          fi
-          echo "Publishing from: ${{ steps.detect.outputs.publish_dir }}"
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ${{ steps.detect.outputs.publish_dir }}
+          path: dist
 
   deploy:
     # zeigt die veröffentlichte URL im Actions-Run an
