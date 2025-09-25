@@ -43,7 +43,6 @@ jobs:
           path: dist
 
   deploy:
-    # zeigt die veröffentlichte URL im Actions-Run an
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -53,5 +52,4 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        # optional: falls du eine CNAME-Domain via Pages-Settings gesetzt hast,
-        # brauchst du hier nichts weiter. (CNAME wird von Pages verwaltet.)
+
