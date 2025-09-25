@@ -1,0 +1,15 @@
+---
+id: orgmgmt.organization.created
+name: Organization Created
+version: 1.0.0
+summary: Published by Org Management when a new organization is persisted (status=provisioning, idpReady=false).
+channels:
+  - id: orgmgmt.{env}.events
+---
+
+## Overview
+
+Triggers Identity Integration to provision Zitadel for the new organization (`orgId`, `slug`).  
+Downstream systems must not assume IdP readiness until the confirmation event is seen.
+
+<NodeGraph />

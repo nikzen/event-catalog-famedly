@@ -1,0 +1,18 @@
+---
+id: deployment.{env}.events
+name: Deployment channel
+version: 1.0.0
+summary: JetStream channel for deployment lifecycle updates (transaction accepted, instance deployed/failed).
+address: deployment.{env}.events
+parameters:
+  env:
+    enum: [dev, stg, prod]
+    description: Environment where the channel is deployed
+---
+
+### Overview
+
+Emits deployment progress and completion events.  
+Org Management consumes to drive the **status** of an Organization.
+
+<ChannelInformation />

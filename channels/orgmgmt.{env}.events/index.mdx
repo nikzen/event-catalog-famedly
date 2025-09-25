@@ -1,0 +1,33 @@
+---
+id: orgmgmt.{env}.events
+name: Org Management channel
+version: 1.0.0
+summary: |
+  Central JetStream channel for all organization lifecycle events
+  (created, suspended, archived, quotasChanged, featuresChanged).
+address: orgmgmt.{env}.events
+parameters:
+  env:
+    enum:
+      - dev
+      - stg
+      - prod
+    description: 'Environment where the Org Management channel is deployed'
+protocols:
+  - nats
+---
+
+### Overview
+
+The **Org Management Events** channel carries all tenant lifecycle events.  
+It is published by the **Org Management Service** and consumed by downstream services like **Identity Integration**.  
+`organization.created` is the trigger for Zitadel provisioning.
+
+<ChannelInformation />
+
+#### Events on this channel
+- `orgmgmt.organization.created`
+- `orgmgmt.organization.suspended`
+- `orgmgmt.organization.archived`
+- `orgmgmt.organization.quotasChanged`
+- `orgmgmt.organization.featuresChanged`

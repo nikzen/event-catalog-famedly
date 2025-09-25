@@ -1,0 +1,21 @@
+---
+id: org-management-service
+name: Organization Management Service
+version: 0.1.0
+summary: Owns the Organization aggregate, publishes org lifecycle events, and marks readiness after identity confirmation.
+sends:
+  - id: orgmgmt.organization.created
+  - id: orgmgmt.organization.updated
+  - id: orgmgmt.organization.markedForDeletion
+receives:
+  - id: deployment.instanceDeployed
+  - id: deployment.failed
+  - id: identity.zitadel.organizationCreated
+---
+
+## Overview
+
+Creates and manages `Organization`. On create, emits `orgmgmt.organization.created` and sets `status=provisioning`.  
+When `identity.zitadel.organizationCreated` arrives, marks the org `idpReady=true` and `status=active`.
+
+<NodeGraph />

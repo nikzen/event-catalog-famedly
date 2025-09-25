@@ -1,0 +1,27 @@
+---
+id: identity-integration-service
+name: Identity Integration Service (Zitadel ACL)
+version: 1.0.0
+summary: |
+  Technical adapter (Anti-Corruption Layer) that provisions and configures Zitadel per tenant.
+  Reacts to Org Management events and ensures Zitadel org/project/clients/roles/policies/actions in an idempotent way.
+sends:
+  - id: identity.zitadel.organizationCreated
+receives:
+  - id: orgmgmt.organization.created
+---
+
+## Overview
+
+The **Identity Integration Service** consumes `orgmgmt.organization.*` events and executes a provisioning saga against **Zitadel**:
+1) Ensure **Organization**,  
+2) Ensure **Project**,  
+3) Ensure **Project Roles**,  
+4) Ensure **OIDC Clients** (Web, Mobile, API/M2M),  
+5) Ensure **Service Users**,  
+6) Ensure **Policies** (MFA, token, IdP links),  
+7) Ensure **Actions** (token claim mapping).
+
+On success, it emits confirmation events (`identity.zitadel.*Ensured`) with external references (IDs) for downstream consumers.
+
+<NodeGraph />

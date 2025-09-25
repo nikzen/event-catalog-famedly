@@ -1,0 +1,79 @@
+---
+id: "OrgCreated_ZitadelProvisioning"
+name: "Superadmin creates Org → Zitadel provisioning"
+version: "1.0.0"
+summary: "Flow from a Superadmin creating an Organization to Zitadel provisioning and marking the Organization ready."
+
+steps:
+  - id: "create_org_initiated"
+    title: "Create Organization"
+    summary: "Superadmin creates a new tenant (Organization)"
+    actor:
+      name: "Superadmin"
+    next_step:
+      id: "org_created_event"
+      label: "Emit orgmgmt.organization.created"
+
+  - id: "org_created_event"
+    title: "Organization Created (Event)"
+    message:
+      id: "orgmgmt.organization.created"
+      version: "1.0.0"
+    next_step:
+      id: "identity_integration_service"
+      label: "Trigger Identity Integration"
+
+  - id: "identity_integration_service"
+    title: "Identity Integration Service"
+    service:
+      id: "identity-integration-service"
+      version: "1.0.0"
+    next_steps:
+      - id: "zitadel_external"
+        label: "Provision Zitadel"
+      - id: "provisioning_failed"
+        label: "Failure handling (retry/DLQ)"
+
+  - id: "zitadel_external"
+    title: "Zitadel"
+    externalSystem:
+      name: "Zitadel"
+      summary: "External Identity Provider"
+      url: "https://zitadel.com/"
+    next_steps:
+      - id: "identity_confirmation_event"
+        label: "Provisioning complete"
+      - id: "provisioning_failed"
+        label: "Provisioning failed"
+
+  - id: "identity_confirmation_event"
+    title: "Zitadel Organization Created (Event)"
+    message:
+      id: "identity.zitadel.organizationCreated"
+      version: "1.0.0"
+    next_step:
+      id: "org_management_service"
+      label: "Mark org ready"
+
+  - id: "org_management_service"
+    title: "Org Management Service"
+    service:
+      id: "org-management-service"
+      version: "1.0.0"
+    summary: "Sets idpReady=true and status=active"
+    next_step:
+      id: "flow_complete"
+      label: "Tenant is ready"
+
+  - id: "provisioning_failed"
+    title: "Provisioning Failed"
+    summary: "Retry with backoff or route to DLQ; Superadmin alerted"
+
+  - id: "flow_complete"
+    title: "Tenant Ready"
+    summary: "Organization active and ready to use (Zitadel provisioned)"
+---
+
+This flow shows how a **Superadmin** creates an Organization, the **Identity Integration Service** provisions Zitadel, and **Org Management** marks the Organization as ready.
+
+<NodeGraph />

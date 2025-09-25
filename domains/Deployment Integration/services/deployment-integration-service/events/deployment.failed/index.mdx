@@ -1,0 +1,15 @@
+---
+id: deployment.failed
+name: Deployment Failed
+version: 1.0.0
+summary: Indicates the external deployment failed; includes reason and transaction-id.
+owners:
+  - Platform SRE
+channel: deployment.{env}.events
+---
+
+## Overview
+
+Used to alert and possibly roll back/cleanup. Org remains in `provisioning` (or transitions to a `provisioning_failed` internal state if you model it).
+
+<NodeGraph />

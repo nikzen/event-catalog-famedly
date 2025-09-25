@@ -1,0 +1,48 @@
+---
+id: organization
+name: Organization
+version: 1.0.0
+aggregateRoot: true
+summary: Tenant aggregate controlling lifecycle, quotas, features and readiness for downstream domains.
+properties:
+  - name: orgId
+    type: UUID
+    required: true
+    description: Unique tenant identifier
+  - name: slug
+    type: string
+    required: true
+    description: Human-readable unique slug
+  - name: status
+    type: string
+    required: true
+    description: Lifecycle state of the organization
+    enum: ['provisioning','active','suspended','archived']
+  - name: idpReady
+    type: boolean
+    required: true
+    description: Indicates Zitadel provisioning status for this org
+  - name: features
+    type: json
+    required: true
+    description: Feature flags for this organization
+  - name: createdAt
+    type: DateTime
+    required: true
+    description: Creation timestamp
+  
+---
+
+## Overview
+
+`Organization` is owned by the **Org Management** domain. On creation it starts in `provisioning` with `idpReady=false`. 
+
+After Zitadel provisioning completes (via Identity Integration), it transitions to `active` with `idpReady=true`.
+
+### Entity Properties
+<EntityPropertiesTable />
+
+## Relationships
+
+* **Identity Integration Service**: provisions Zitadel for this org.  
+* **Events**: produced `orgmgmt.organization.created`; consumed `identity.zitadel.organizationCreated` to set `idpReady=true`.

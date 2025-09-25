@@ -1,0 +1,21 @@
+---
+id: deployment-integration-service
+name: Deployment Integration Service 
+version: 1.0.0
+summary: |
+  Calls external deployment webhooks, receives a transaction-id, and emits deployment lifecycle events.
+sends:
+  - id: deployment.requestAccepted
+  - id: deployment.instanceDeployed
+  - id: deployment.failed
+receives:
+ - id: orgmgmt.organization.created
+---
+
+## Overview
+
+When a new org is created, this service invokes an **external Deployment Webhook** (payload: orgId, slug, config).  
+It receives a **transaction-id** and emits `deployment.requestAccepted`.  
+Once the external platform signals completion (webhook/callback/polling), it emits `deployment.instanceDeployed` (or `deployment.failed`).
+
+<NodeGraph />

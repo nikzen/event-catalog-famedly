@@ -1,0 +1,14 @@
+---
+id: deployment.requestAccepted
+name: Deployment Request Accepted
+version: 1.0.0
+summary: External deployment accepted and returned a transaction-id for tracking.
+channel: deployment.{env}.events
+---
+
+## Overview
+
+Emitted by the Deployment Integration Service after the external platform accepted the request.  
+Payload typically contains `orgId`, `transactionId`, and echo of request parameters for audit.
+
+<NodeGraph />

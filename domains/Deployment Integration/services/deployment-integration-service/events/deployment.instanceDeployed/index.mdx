@@ -1,0 +1,16 @@
+---
+id: deployment.instanceDeployed
+name: Instance Deployed
+version: 1.0.0
+summary: Signals that the tenant instance has been successfully deployed and is ready for use.
+owners:
+  - Platform SRE
+channel: deployment.{env}.events
+---
+
+## Overview
+
+Org Management consumes this event to set `status=active` and persist `deploymentTransactionId`.  
+This is the **authoritative** readiness signal for the Organization lifecycle.
+
+<NodeGraph />
