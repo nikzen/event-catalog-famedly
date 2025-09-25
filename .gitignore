@@ -5,6 +5,7 @@ build/
 .cache/
 dist/
 .eventcatalog-core/
+dist/
 
 # Logfiles
 npm-debug.log*
