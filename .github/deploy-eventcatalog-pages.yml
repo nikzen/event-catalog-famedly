@@ -1,0 +1,71 @@
+name: Deploy EventCatalog
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build EventCatalog
+        run: npm run build
+
+      # Optional (setzt z. B. Base-Path richtig für Pages)
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      # Ermittel den Build-Ordner (out oder build)
+      - name: Detect build directory
+        id: detect
+        run: |
+          if [ -d "out" ]; then
+            echo "publish_dir=out" >> $GITHUB_OUTPUT
+          elif [ -d "build" ]; then
+            echo "publish_dir=build" >> $GITHUB_OUTPUT
+          else
+            echo "Konnte Build-Ordner nicht finden (erwarte 'out' oder 'build')." >&2
+            exit 1
+          fi
+          echo "Publishing from: ${{ steps.detect.outputs.publish_dir }}"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ steps.detect.outputs.publish_dir }}
+
+  deploy:
+    # zeigt die veröffentlichte URL im Actions-Run an
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        # optional: falls du eine CNAME-Domain via Pages-Settings gesetzt hast,
+        # brauchst du hier nichts weiter. (CNAME wird von Pages verwaltet.)
